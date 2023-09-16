@@ -1,4 +1,4 @@
-package de.wwu.scdh.saxon.hardening;
+package de.wwu.scdh.saxon.harden;
 
 public class FilesystemFilterException extends Exception {
     public FilesystemFilterException(String msg) {

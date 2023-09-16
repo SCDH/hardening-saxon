@@ -1,4 +1,4 @@
-package de.wwu.scdh.saxon.hardening;
+package de.wwu.scdh.saxon.harden;
 
 import java.io.File;
 import java.net.URI;
