@@ -27,28 +27,12 @@ public class FilesystemFilter {
     public static final String ENVIRON = "SAXON_ALLOWED_PATHS";
 
     /**
-     * The standard constructor sets the allowed locations from a
-     * system property or an environment variable, which define a list
-     * of paths.  The name of the system property is {@link
-     * FileSystemFilter.PROPERTY}. The name of the environment
-     * variable is {@link FilesystemFilter.ENVIRON}.  Paths are
-     * separated by {@link FilesystemFilter.SEPARATOR}.<P>
-     *
-     * <code>~</code> can be used to point to the user's home directory.
+     * The standard constructor sets no allowed locations at all.
      */
-    public FilesystemFilter() throws FilesystemFilterException {
-	this(getPropOrEnv());
-    }
-
-    private static String[] getPropOrEnv() {
-	if (System.getProperty(PROPERTY) != null) {
-	    return System.getProperty(PROPERTY).split(SEPARATOR);
-	} else if (System.getenv(ENVIRON) != null) {
-	    return System.getenv(ENVIRON).split(SEPARATOR);
-	} else {
-	    String rc[] = {};
-	    return rc;
-	}
+    public FilesystemFilter() {
+	String empty[] = {};
+	this.allowedLocations = empty;
+	notifyEmpty();
     }
 
     /**
@@ -67,14 +51,7 @@ public class FilesystemFilter {
 	}
 
 	if (allowedLocations.length == 0) {
-	    System.err.println
-		("WARNING: No allowed file system locations configured for file system filter. Set the '"
-		 + ENVIRON
-		 + "' environment variable or the '"
-		 + PROPERTY
-		 + "' system property in order to add allowed paths. E.g. 'java -D"
-		 + PROPERTY
-		 + "=~/xsl,~/docs ...' to do so.");
+	    notifyEmpty();
 	}
 
 	for (int i = 0; i < allowedLocations.length; i++) {
@@ -117,6 +94,57 @@ public class FilesystemFilter {
 	    }
 	}
 
+    }
+
+    /**
+     * This static method returns a {@link FilesystemFilter} and sets
+     * its allowed locations from a system property or an environment
+     * variable, which define a list of paths.  The name of the system
+     * property is {@link FileSystemFilter.PROPERTY}. The name of the
+     * environment variable is {@link FilesystemFilter.ENVIRON}.
+     * Paths are separated by {@link FilesystemFilter.SEPARATOR}.<P>
+     *
+     * Configuration errors result in an empty set of allowed paths,
+     * but will be notified on stderr.<P>
+     *
+     * <code>~</code> can be used to point to the user's home directory.
+     */
+    public static FilesystemFilter fromPropertiesOrEnvironment() {
+	try {
+	    return new FilesystemFilter(getPropOrEnv());
+	} catch (FilesystemFilterException e) {
+	    System.err.println(e.getMessage());
+	    return new FilesystemFilter();
+	}
+    }
+
+    /**
+     * Get an array of paths from a system property or environment
+     * variable.
+     */
+    protected static String[] getPropOrEnv() {
+	if (System.getProperty(PROPERTY) != null) {
+	    return System.getProperty(PROPERTY).split(SEPARATOR);
+	} else if (System.getenv(ENVIRON) != null) {
+	    return System.getenv(ENVIRON).split(SEPARATOR);
+	} else {
+	    String rc[] = {};
+	    return rc;
+	}
+    }
+
+    /**
+     * Notify users that no allowed paths are configured.
+     */
+    protected static void notifyEmpty() {
+	System.err.println
+	    ("WARNING: No allowed file system locations configured for file system filter. Set the '"
+	     + ENVIRON
+	     + "' environment variable or the '"
+	     + PROPERTY
+	     + "' system property in order to add allowed paths. E.g. 'java -D"
+	     + PROPERTY
+	     + "=~/xsl,~/docs ...' to do so.");
     }
 
     /**

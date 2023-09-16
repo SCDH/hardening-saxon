@@ -16,6 +16,11 @@ public class FilesystemFilterTest {
 
     FilesystemFilter filter;
 
+    @Test
+    public void constructDefault() {
+	FilesystemFilter filter = new FilesystemFilter();
+	assertEquals(0, filter.getAllowedLocations().length);
+    }
 
     @Test
     public void constructNull() {
@@ -74,6 +79,25 @@ public class FilesystemFilterTest {
 	// assertEquals("", filter.getAllowedLocations()[0]);
 	assertTrue(filter.getAllowedLocations()[0].endsWith("/xsl/"));
 	assertTrue(filter.getAllowedLocations()[0].length() > 4);
+    }
+
+    @Test
+    public void fromPropertiesOrEnviron() {
+	FilesystemFilter filter = FilesystemFilter.fromPropertiesOrEnvironment();
+	int n = 0;
+	if (System.getProperty(FilesystemFilter.PROPERTY) != null) {
+	    n = System.getProperty(FilesystemFilter.PROPERTY).split(FilesystemFilter.SEPARATOR).length;
+	} else if (System.getenv(FilesystemFilter.ENVIRON) != null) {
+	    n = System.getenv(FilesystemFilter.ENVIRON).split(FilesystemFilter.SEPARATOR).length;
+	}
+	assertEquals(n, filter.getAllowedLocations().length);
+    }
+
+    @Test
+    public void fromProperties() {
+	System.setProperty(FilesystemFilter.PROPERTY, "~/xsl,~/doc");
+	FilesystemFilter filter = FilesystemFilter.fromPropertiesOrEnvironment();
+	assertEquals(2, filter.getAllowedLocations().length);
     }
 
     @Test
