@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
-
 /**
  * A filter that restricts access to the file system to a specific
  * paths given by configuration. Requests to URI schemes other than
@@ -162,6 +161,8 @@ public class FilesystemFilter {
      * file URI.  All other URIs will pass the check.
      *
      * @param absolute  {@link URI} to check
+     *
+     * @return false if and only if a file URI pointing outside of allowed locations
      */
     public boolean check(URI absolute) {
 
@@ -207,6 +208,32 @@ public class FilesystemFilter {
 	    return false;
 	} catch (URISyntaxException e) {
 	    // illegal URI
+	    return false;
+	}
+    }
+
+    /**
+     * This checks if the given <code>href</code> points to an allowed
+     * file system location or is a non-file URI. A relative reference
+     * is first resolved against the URI given in the second parameter.
+     *
+     * @param href  the reference to be checked
+     * @param base  the base URI to be used to resolve a relative href
+     *
+     * @return false if and only if a file URI pointing outside of allowed locations
+     *
+     * @see FilesystemFilter.check(java.net.URI)
+     */
+    public boolean check(String href, String base) {
+	try {
+	    // resolve relative href
+	    URI baseUri = new URI(base);
+	    URI absolute = baseUri.resolve(href);
+	    // check URI
+	    return check(absolute);
+	} catch (URISyntaxException e) {
+	    return false;
+	} catch (NullPointerException e) {
 	    return false;
 	}
     }

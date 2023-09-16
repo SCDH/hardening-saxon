@@ -5,16 +5,11 @@ import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-
 
 
 
 public class FilesystemFilterTest {
 
-
-    FilesystemFilter filter;
 
     @Test
     public void constructDefault() {
@@ -143,6 +138,57 @@ public class FilesystemFilterTest {
 	assertFalse(filter.check(new URI("/application/xsl/../../etc/passwd")));
 	// normalizing may also result in allowed paths
 	assertTrue(filter.check(new URI("/etc/../application/xsl/id.xsl")));
+    }
+
+    @Test
+    public void nonFileURIs() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertTrue(filter.check(new URI("http://example.com/application/xsl/../config/secret")));
+	assertTrue(filter.check(new URI("https://example.com/application/xsl/../../etc/passwd")));
+	assertTrue(filter.check(new URI("ftp://example.com/application/xsl/id.xsl")));
+    }
+
+
+    @Test
+    public void resolvePaths() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertTrue(filter.check("other/brother.xsl", "/application/xsl/id.xsl"));
+	assertTrue(filter.check("../docs/brother.xml", "/application/xsl/id.xsl"));
+	assertFalse(filter.check("../other/secret", "/application/xsl/id.xsl"));
+	assertFalse(filter.check("shadow", "/etc/passwd"));
+    }
+
+    @Test
+    public void resolveAbsPaths() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertTrue(filter.check("/application/xsl/brother.xsl", "/application/xsl/id.xsl"));
+	assertTrue(filter.check("/application/xsl/../docs/brother.xml", "/application/xsl/id.xsl"));
+	assertFalse(filter.check("/application/../other/secret", "/application/xsl/id.xsl"));
+	assertFalse(filter.check("/etc/shadow", "/etc/passwd"));
+	assertFalse(filter.check("", ""));
+    }
+
+    @Test
+    public void resolveNonFilePaths() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertTrue(filter.check("other.xsl", "http://example.com/xsl/id.xsl"));
+	assertTrue(filter.check("other.xml", "https://example.com/xsl/id.xsl"));
+    }
+
+    @Test
+    public void resolvePathsCornerCases() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertFalse(filter.check("", ""));
+	assertFalse(filter.check("id.xsl", "relative.xsl"));
+	assertFalse(filter.check("id.xsl", null));
+	assertFalse(filter.check(null, "/application/xsl/id.xsl"));
+	assertFalse(filter.check(null, "/application/xsl/id.xsl"));
+	assertFalse(filter.check("/application/xsl/id.xsl", null)); // TODO?
     }
 
 }
