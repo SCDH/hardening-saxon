@@ -1,0 +1,22 @@
+name: Test
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+      - dev
+  release:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Run tests
+        run: ./mvnw --batch-mode verify

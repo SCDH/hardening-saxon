@@ -1,0 +1,20 @@
+name: Deploy JavaDoc
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+-?**"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy JavaDoc
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: javadoc
+          java-version: 11
+          target-folder: javadoc # url will be https://<username>.github.io/<repo>/javadoc
+          project: maven # or gradle
+          # subdirectories: moduleA moduleB #for subdirectories support, needs to be run with custom command
