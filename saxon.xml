@@ -8,7 +8,7 @@
   <global
     allowedProtocols="all"
     allowExternalFunctions="true"
-    unparsedTextURIResolver="de.wwu.scdh.saxon.harden.HardenedUnparsedTextResolver"
+    unparsedTextUriResolver="de.wwu.scdh.saxon.harden.HardenedUnparsedTextResolver"
     uriResolver="de.wwu.scdh.saxon.harden.HardenedURIResolver"
     />
 
