@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 
 
@@ -47,6 +49,7 @@ public class FilesystemFilterTest {
 	assertEquals(0, filter.getAllowedLocations().length);
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void construct() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs", "/application/dir/" };
@@ -57,6 +60,7 @@ public class FilesystemFilterTest {
 	assertEquals("/application/dir/", filter.getAllowedLocations()[2]);
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void constructUserHome() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "~/xsl" };
@@ -66,6 +70,7 @@ public class FilesystemFilterTest {
 	assertTrue(filter.getAllowedLocations()[0].endsWith("/xsl/"));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void constructRelative() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "xsl" };
@@ -95,6 +100,7 @@ public class FilesystemFilterTest {
 	assertEquals(2, filter.getAllowedLocations().length);
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void fileURI() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/" };
@@ -102,6 +108,7 @@ public class FilesystemFilterTest {
 	assertTrue(filter.check(new URI("file:/etc/passwd")));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void filePath() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/" };
@@ -109,6 +116,7 @@ public class FilesystemFilterTest {
 	assertTrue(filter.check(new URI("/etc/passwd")));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void denyRelative() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/" };
@@ -120,6 +128,7 @@ public class FilesystemFilterTest {
 	assertFalse(filter.check(new URI("file:xsl/id.xsl")));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void filterPaths() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -130,6 +139,7 @@ public class FilesystemFilterTest {
 	assertFalse(filter.check(new URI("/application/config/secret")));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void normalizePaths() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -140,6 +150,7 @@ public class FilesystemFilterTest {
 	assertTrue(filter.check(new URI("/etc/../application/xsl/id.xsl")));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void nonFileURIs() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -150,6 +161,7 @@ public class FilesystemFilterTest {
     }
 
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void resolvePaths() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -160,6 +172,7 @@ public class FilesystemFilterTest {
 	assertFalse(filter.check("shadow", "/etc/passwd"));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void resolveAbsPaths() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -171,6 +184,7 @@ public class FilesystemFilterTest {
 	assertFalse(filter.check("", ""));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void resolveNonFilePaths() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
@@ -179,6 +193,7 @@ public class FilesystemFilterTest {
 	assertTrue(filter.check("other.xml", "https://example.com/xsl/id.xsl"));
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void resolvePathsCornerCases() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
