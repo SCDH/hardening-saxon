@@ -76,38 +76,25 @@ public class FilesystemFilter {
 		throw new FilesystemFilterException("configuration error: allowed location may not be the empty string");
 	    }
 
-	    try {
-		String normalizedPath;
-
-		if (location.startsWith("~")) {
-		    normalizedPath = System.getProperty("user.home") + location.substring(1);
-		} else {
-		    normalizedPath = location;
-		}
-
-		// make absolute
-		normalizedPath = new File(normalizedPath).getAbsolutePath();
-		// assert path separator (/) at end
-		if (!normalizedPath.endsWith("/") && !normalizedPath.endsWith(File.separator)) {
-		    // if path does not end with a path separator,
-		    // resolving against it will interpret the last path
-		    // segment as a file
-		    normalizedPath = normalizedPath + File.separator;
-		}
-		// normalize
-		/* This may cause problems on Windows with
-		   \\host\path\to\somewhere, see
-		   https://en.wikipedia.org/wiki/File_URI_scheme
-		   However, we call normalize() on the check() method,
-		   too.
-		 */
-		URI uri = new URI("file", normalizedPath, "").normalize();
-		// store to field
-		this.allowedLocations[i] = uri.getSchemeSpecificPart();
-		// LOG.info(uri.getRawSchemeSpecificPart() + " added to allowed paths");
-	    } catch (URISyntaxException e) {
-		throw new FilesystemFilterException("invalid path configured for FilesystemFilter: " + e.getMessage());
+	    if (location.startsWith("~")) {
+		location = System.getProperty("user.home") + location.substring(1);
 	    }
+
+	    // make absolute
+	    File path = new File(location).getAbsoluteFile();
+	    // make URI and normalize
+	    URI uri = path.toURI().normalize();
+	    // store to field
+	    if (uri.getSchemeSpecificPart().endsWith("/")) {
+		// assert path separator (/) at end
+		// if path does not end with a path separator,
+		// resolving against it will interpret the last path
+		// segment as a file
+		this.allowedLocations[i] = uri.getSchemeSpecificPart();
+	    } else {
+		this.allowedLocations[i] = uri.getSchemeSpecificPart() + "/";
+	    }
+	    // LOG.info(uri.getRawSchemeSpecificPart() + " added to allowed paths");
 	}
 
     }
