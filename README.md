@@ -1,5 +1,9 @@
 # Hardening Saxon
 
+![Tests](https://github.com/github/docs/actions/workflows/test.yml/badge.svg)
+![Deploy](https://github.com/github/docs/actions/workflows/deploy.yml/badge.svg)
+[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://scdh.github.io/hardening-saxon/javadoc/)
+
 Running XSLT, XQuery and XPath bears some security risks if you do not
 know exactly what is in a script. For example, an XPath expression may
 contain code for stealing secrets from your computer, or an XSLT
@@ -74,6 +78,11 @@ like the following are thrown:
 Error in xsl:result-document/@href on line 19 column 64 of add-key.xsl:
    path not allowed: /home/clueck/.ssh/authorized_keys
 ```
+
+## API
+
+See the [JavaDocs](https://scdh.github.io/hardening-saxon/javadoc) of
+this project.
 
 
 ## License
