@@ -185,7 +185,7 @@ public class FilesystemFilter {
 
 	    // 3. check
 	    if (absolute.getScheme().equals("file")) {
-		if (absolute.getPath() == null) {
+		if (absolute.getSchemeSpecificPart() == null) {
 		    // illegal file URI: null path
 		    return false;
 		} else if (!absolute.isAbsolute()) {
