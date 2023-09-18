@@ -86,10 +86,9 @@ public class FilesystemFilter {
 	    URI uri = path.toURI().normalize();
 	    // store to field
 	    if (uri.getSchemeSpecificPart().endsWith("/")) {
-		// assert path separator (/) at end
-		// if path does not end with a path separator,
-		// resolving against it will interpret the last path
-		// segment as a file
+		// assert terminating path separator: a terminating
+		// slash makes the check method robust when an allowed
+		// path is the prefix of a non-allowed path
 		this.allowedLocations[i] = uri.getSchemeSpecificPart();
 	    } else {
 		this.allowedLocations[i] = uri.getSchemeSpecificPart() + "/";

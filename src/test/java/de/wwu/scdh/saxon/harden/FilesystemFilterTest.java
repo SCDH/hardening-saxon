@@ -152,6 +152,14 @@ public class FilesystemFilterTest {
 
     @DisabledOnOs(OS.WINDOWS)
     @Test
+    public void prefixPaths() throws FilesystemFilterException, URISyntaxException {
+	String allowed[] = { "/application/xsl", "/application/docs" };
+	FilesystemFilter filter = new FilesystemFilter(allowed);
+	assertFalse(filter.check(new URI("/application/xslt/id.xsl")));
+    }
+
+    @DisabledOnOs(OS.WINDOWS)
+    @Test
     public void nonFileURIs() throws FilesystemFilterException, URISyntaxException {
 	String allowed[] = { "/application/xsl", "/application/docs" };
 	FilesystemFilter filter = new FilesystemFilter(allowed);
