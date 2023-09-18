@@ -16,13 +16,17 @@ by
 
 ## Getting started
 
-Clone this repo and run `{shell}./mvnw package` (Linux/Mac) or
-`{shell}mvnw.bat package` (Windows) in order to build the hardening
-classes and get wrapper scripts for simple usage. Then, there will be
-wrapper scripts in `target/bin/`.
+Clone this repo and run `./mvnw package` (Linux/Mac) or `.\mvnw.cmd
+package` (Windows) in order to build the hardening classes and get
+wrapper scripts for simple usage. Then, there will be wrapper scripts
+in `target/bin/` for Linux, Mac, and Windows.
 
 You can run the wrapper scripts from anywhere on your computer since
 they only contain absolute paths.
+
+Note: You need a Java JDK, e.g. OpenJDK, installed on your computer
+for running the above commands. A Maven installation is not required
+when building through the maven wrapper scripts `mvnw` and `mvnw.cmd`.
 
 
 ## Usage
@@ -34,10 +38,18 @@ In order to restrict access to files and subfolders of the folders
 export SAXON_ALLOWED_PATHS=~/projects,~/src/xsl
 ```
 
-Then use the wrapper scripts in `target/bin/` and the Saxon
-configuration in `saxon.xml`. This configuration file tells Saxon to
-use URI resolvers for the various ways of accessing the file
-system. These URI resolvers restrict access to the allowed paths.
+On a Windows powershell you can set allowed paths like this:
+
+```{shell}
+$env:SAXON_ALLOWED_PATHS="~/projects,~/src/xsl"
+```
+
+
+Then use the wrapper scripts in `target/bin/` and the [Saxon
+configuration](https://www.saxonica.com/documentation10/index.html#!configuration/configuration-file)
+in `saxon.xml`. This configuration file tells Saxon to use URI
+resolvers for the various ways of accessing the file system. These URI
+resolvers restrict access to the allowed paths.
 
 In order to run XSLT with restriction to these paths, use the
 configuration file like so:
