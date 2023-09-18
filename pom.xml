@@ -5,7 +5,7 @@
 
     <groupId>de.wwu.scdh</groupId>
     <artifactId>HardeningSaxon</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <name>Hardening Saxon</name>
     <url>https://github.com/scdh/hardening-saxon</url>
 
@@ -42,7 +42,7 @@
        <repository>
 	  <id>github</id>
 	  <name>GitHub Packages</name>
-	  <url>https://maven.pkg.github.com/SCDH/hardening-saxon</url>
+	  <url>https://maven.pkg.github.com/scdh/hardening-saxon</url>
        </repository>
     </distributionManagement>
 
