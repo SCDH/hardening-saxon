@@ -4,6 +4,9 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import net.sf.saxon.lib.Logger;
+import net.sf.saxon.lib.StandardLogger;
+
 
 /**
  * A filter that restricts access to the file system to a specific
@@ -24,6 +27,8 @@ public class FilesystemFilter {
     public static final String PROPERTY = FilesystemFilter.class.getName();
 
     public static final String ENVIRON = "SAXON_ALLOWED_PATHS";
+
+    private static final Logger LOG = new StandardLogger();
 
     /**
      * The standard constructor sets no allowed locations at all.
@@ -112,7 +117,7 @@ public class FilesystemFilter {
 	try {
 	    return new FilesystemFilter(getPropOrEnv());
 	} catch (FilesystemFilterException e) {
-	    System.err.println(e.getMessage());
+	    LOG.error(e.getMessage());
 	    return new FilesystemFilter();
 	}
     }
@@ -136,8 +141,8 @@ public class FilesystemFilter {
      * Notify users that no allowed paths are configured.
      */
     protected static void notifyEmpty() {
-	System.err.println
-	    ("WARNING: No allowed file system locations configured for file system filter. Set the '"
+	LOG.warning
+	    ("No allowed file system locations configured for file system filter. Set the '"
 	     + ENVIRON
 	     + "' environment variable or the '"
 	     + PROPERTY
