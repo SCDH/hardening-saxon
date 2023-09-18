@@ -5,7 +5,7 @@
 
     <groupId>de.wwu.scdh</groupId>
     <artifactId>HardeningSaxon</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <name>Hardening Saxon</name>
     <url>https://github.com/scdh/hardening-saxon</url>
 
