@@ -40,11 +40,16 @@ public class FilesystemFilter {
     }
 
     /**
-     * Make a new {@link FilesystemFilter}.<P>
+     * Make a new {@link FilesystemFilter} from an array of file
+     * system paths. The paths should follow the OS-specific form,
+     * e.g. <code>c:\\users\\<P> on Windows or
+     * <code>~/projects/xsl</code> on *nix. Paths are converted to
+     * healty URIs internally. Relative paths are converted to
+     * absolute paths.
      *
      * <code>~</code> can be used to point to the user's home directory.
      *
-     * @param allowedLocations  locations on the file system allowed for read and write access
+     * @param allowedLocations  locations (paths) on the file system allowed for read and write access
      */
     public FilesystemFilter (String[] allowedLocations) throws FilesystemFilterException {
 
@@ -90,9 +95,16 @@ public class FilesystemFilter {
 		    normalizedPath = normalizedPath + File.separator;
 		}
 		// normalize
+		/* This may cause problems on Windows with
+		   \\host\path\to\somewhere, see
+		   https://en.wikipedia.org/wiki/File_URI_scheme
+		   However, we call normalize() on the check() method,
+		   too.
+		 */
 		URI uri = new URI("file", normalizedPath, "").normalize();
 		// store to field
 		this.allowedLocations[i] = uri.getSchemeSpecificPart();
+		// LOG.info(uri.getRawSchemeSpecificPart() + " added to allowed paths");
 	    } catch (URISyntaxException e) {
 		throw new FilesystemFilterException("invalid path configured for FilesystemFilter: " + e.getMessage());
 	    }
