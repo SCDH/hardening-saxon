@@ -113,6 +113,8 @@
                                     <includes>
                                         <include>xslt.sh</include>
                                         <include>saxon.sh</include>
+                                        <include>xslt.cmd</include>
+                                        <include>saxon.cmd</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -134,6 +136,8 @@
                             <target>
                                 <chmod file="${project.build.directory}/bin/xslt.sh" perm="755"/>
                                 <chmod file="${project.build.directory}/bin/saxon.sh" perm="755"/>
+                                <chmod file="${project.build.directory}/bin/xslt.cmd" perm="755"/>
+                                <chmod file="${project.build.directory}/bin/saxon.cmd" perm="755"/>
                             </target>
                         </configuration>
                         <goals>
